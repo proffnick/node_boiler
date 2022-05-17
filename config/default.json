@@ -1,6 +1,6 @@
 {
     "jwtPrivateKey": "donewithitPK",
     "db": "mongodb://localhost/donewithit_db",
-    "assets": "http://192.168.43.66:4000/",
+    "assets": "http://192.168.43.66:4000/assets",
     "port": 4000
 }
