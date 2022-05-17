@@ -1,0 +1,4 @@
+{
+    "jwtPrivateKey": "donewithitPK",
+    "db": "mongodb://localhost/donewithit_db"
+}
