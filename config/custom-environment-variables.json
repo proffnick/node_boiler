@@ -1,4 +1,6 @@
 {
     "jwtPrivateKey": "done_with_it",
-    "db": "dwit_db"
+    "db": "dwit_db",
+    "assets": "dwit_assets",
+    "port": "dwit_port"
 }
