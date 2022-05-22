@@ -34,25 +34,43 @@ const userSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    pushNotificationToken: {
+        type: String,
+        default: ''
     }
 
 });
 
 userSchema.methods.generateAuthToken = function(){
-    const token = jwt.sign({_id: this._id, isAdmin: this.isAdmin}, config.get('jwtPrivateKey'));
+    const token = jwt.sign({
+                    _id: this._id, 
+                    isAdmin: this.isAdmin, 
+                    email: this.email, 
+                    name: this.name, 
+                    pushNotificationToken: this.pushNotificationToken}, config.get('jwtPrivateKey'));
     return token;
 }
+
 // create model for customer
 const User = mongoose.model('Users', userSchema);
 
 // validate genre 
-function validateUser(user){
-    const schema = {
+function validateUser(user, unknown = false, update = false){
+
+
+    const schema = !update ? Joi.object({
         name: Joi.string().max(50).required().min(5),
         email: Joi.string().required().min(5).max(150).email(),
-        password:  Joi.string().required().min(5).max(255)
-    }
-    return Joi.validate(user, schema);
+        password:  Joi.string().required().min(5).max(255),
+        pushNotificationToken: Joi.string()
+    }):
+    Joi.object({
+        name: Joi.string().max(50),
+        email: Joi.string().max(150).email(),
+        pushNotificationToken: Joi.string().allow(null, '')
+    });
+    return schema.validate(user, {allowUnknown: unknown});
 }
 
 exports.User = User;

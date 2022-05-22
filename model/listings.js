@@ -12,7 +12,7 @@ const listingSchema = new mongoose.Schema({
         trim: true
     },
     images: {
-        type: Array,
+        type: [new mongoose.Schema({url:{type: String}, thumbnailUrl: {type: String}})],
         required: true,
     },
     price: {
@@ -32,6 +32,10 @@ const listingSchema = new mongoose.Schema({
     location:{
         type: Object,
         default: {}
+    },
+    description: {
+        type: String,
+        default: ''
     },
     date: {
         type: Date,
@@ -61,16 +65,17 @@ const Listing = mongoose.model('Listings', listingSchema);
 
 // validate genre 
 function validateListing(listing){
-    const schema = {
+    const schema = Joi.object({
         title:  Joi.string().max(150).required().min(5),
-        images: Joi.array().items(Joi.object({url: Joi.string(), thumbnailUrl: Joi.string()})).min(1).max(1),
-        price:  Joi.number().precision(2).required().min(0).max(8),
+        images: Joi.array().items(Joi.object({url: Joi.string(), thumbnailUrl: Joi.string()})).min(1).max(5),
+        price:  Joi.number().precision(2).required().min(0),
         categoryId: Joi.string(),
         userId: Joi.objectId().required(),
-        location: Joi.object({latitude: Joi.number, longitude: Joi.number})
+        location: Joi.string().max(200),
+        description: Joi.string().max(500)
 
-    }
-    return Joi.validate(listing, schema);
+    })
+    return schema.validate(listing);
 }
 
 exports.Listing         = Listing;

@@ -1,0 +1,4 @@
+[
+{  "_id": {"$oid": "62832a4563f6908be3c7462a"},  "title": "Red jacket for sale",  "images": [    {      "url": "http://192.168.43.66:4000/assets/red-jacket.jpg",      "thumbnailUrl": "http://192.168.43.66:4000/assets/red-jacket.jpg"    }  ],  "price": 100.25,  "categoryId": 6,  "userId": {"$oid": "628323a163f6908be3c7461a"},  "location": {    "latitude": "9.060352",    "longitude": "7.467827"  }},
+{  "_id": {"$oid": "6283284463f6908be3c74629"},  "title": "Beautiful Couch",  "images": [    {      "url": "http://192.168.43.66:4000/assets/couch.jpg",      "thumbnailUrl": "http://192.168.43.66:4000/assets/couch.jpg"    }  ],  "price": 150,  "categoryId": 5,  "userId": {"$oid": "628323a163f6908be3c7461a"},  "location": {    "latitude": "9.060352",    "longitude": "7.467827"  }}
+]
