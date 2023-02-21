@@ -1,6 +1,23 @@
 {
-    "jwtPrivateKey": "done_with_it",
-    "db": "dwit_db",
-    "assets": "dwit_assets",
-    "port": "dwit_port"
+    "jwtPrivateKey": "psa_private_key",
+    "db": "pas_db",
+    "auth": "psa_auth",
+    "assets": "psa_assets",
+    "port": "psa_port",
+    "kitEndPoint": "kit_endpoint",
+    "kitPrivate": "kit_private",
+    "kitPublic": "kit_public",
+    "baseUrl": "psa_baseurl",
+    "defaultEmail": "psa_defaultemail",
+    "termiiKey": "psa_termiikey",
+    "termiiSendUrl": "psa_termiisendurl",
+    "termiiSendUrlSMS": "psa_termiisendurlsms",
+    "paystackPrivateKey": "psa_paystackprivatekey",
+    "paystackBaseUrl": "psa_payStackbaseurl",
+    "sendMailPath":"psa_sendMailPath",
+    "gmailClientId": "psa_gmailclientid",
+    "gmailClientSecret": "psa_gmailclientsecret",
+    "gmailRefreshToken": "psa_gmailrefreshtoken",
+    "gmailRedirectUrl": "psa_gmailredirecturl",
+    "psaObjectId": "psa_objectid"
 }

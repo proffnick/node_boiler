@@ -20,17 +20,147 @@ const router    = express.Router();
 // request for all customers
 router.get('/', async (req, res)=>{
     // check if genres available
-    const user = await User.find().select({name: 1, email: 1, date: 1, _id: 1, pushNotificationToken: 1}).sort({name: 1});
+    const user = await User.find().select({
+        firstName: 1, 
+        lastName: 1, 
+        phoneNumber: 1, 
+        email: 1, 
+        officeAddress: 1, 
+        addressCoords: 1, 
+        currentLocation: 1, 
+        profileImage: 1, 
+        date: 1, 
+        userType: 1, 
+        numberOfRides: 1, 
+        averageRequests: 1, 
+        meansOfIdentity: 1, 
+        identity: 1, 
+        approved: 1, 
+        region: 1,  
+        country: 1, 
+        isAdmin: 1, 
+        pushNotificationToken: 1, 
+        isComplete: 1,
+        isBiometric: 1,
+        lastSeen: 1,
+        subRegion: 1,
+        hasPendingRequest: 1,
+        online: 1
+        }).sort({date: 1});
     res.send(user);
 
 });
 
+router.get('/active/riders', async (req, res)=>{
+    // check if genres available
+    if(!req.query.active) return res.status(404).send({error: true, message: 'Bad Request'});
+    const query = JSON.parse(decodeURI(req.query.active));
+   // console.log(JSON.stringify(query));
+    const users = await User.find(query).select({
+        firstName: 1, 
+        lastName: 1, 
+        phoneNumber: 1, 
+        email: 1, 
+        officeAddress: 1, 
+        addressCoords: 1, 
+        currentLocation: 1, 
+        profileImage: 1, 
+        date: 1, 
+        userType: 1, 
+        numberOfRides: 1, 
+        averageRequests: 1, 
+        meansOfIdentity: 1, 
+        identity: 1, 
+        approved: 1, 
+        region: 1,  
+        country: 1, 
+        isAdmin: 1, 
+        pushNotificationToken: 1, 
+        isComplete: 1,
+        isBiometric: 1,
+        lastSeen: 1,
+        subRegion: 1,
+        online: 1,
+        hasPendingRequest: 1
+        }).sort({date: 1});
+    res.send(users);
+
+});
+
+
+router.get('/:id', async (req, res)=>{
+    // check if genres available
+    try {
+        const user = await User.findOne({_id: req.params.id}).select({
+            firstName: 1, 
+            lastName: 1, 
+            phoneNumber: 1, 
+            email: 1, 
+            officeAddress: 1, 
+            addressCoords: 1, 
+            currentLocation: 1, 
+            profileImage: 1, 
+            date: 1, 
+            userType: 1, 
+            numberOfRides: 1, 
+            averageRequests: 1, 
+            meansOfIdentity: 1, 
+            identity: 1, 
+            approved: 1, 
+            region: 1,  
+            country: 1, 
+            isAdmin: 1, 
+            pushNotificationToken: 1, 
+            isComplete: 1,
+            isBiometric: 1,
+            lastSeen: 1,
+            subRegion: 1,
+            online: 1,
+            hasPendingRequest: 1
+            }).sort({date: 1});
+        res.send(user);
+    } catch (error) {
+        res.status(404).send({error: true, message: "request not found"})
+    }
+    
+
+});
+
 router.post('/find', async (req, res)=>{
-    const error = !req.body.hasOwnProperty('email') ? true : false;
+    const error = !req.body.hasOwnProperty('phoneNumber') ? true : false;
 
     if(error) return res.status(400).send({error: true, message: 'Bad Request'});
     // check if users available
-    const user = await User.find({email: req.body.email}).select({name: 1, email: 1, date: 1, _id: 1, pushNotificationToken: 1}).sort({name: 1});
+    const user = await User.findOne({phoneNumber: req.body.phoneNumber}).select({
+        firstName: 1, 
+        lastName: 1, 
+        phoneNumber: 1, 
+        email: 1, 
+        officeAddress: 1, 
+        addressCoords: 1, 
+        currentLocation: 1, 
+        profileImage: 1, 
+        date: 1, 
+        userType: 1, 
+        numberOfRides: 1, 
+        averageRequests: 1, 
+        meansOfIdentity: 1, 
+        identity: 1, 
+        approved: 1, 
+        region: 1,  
+        country: 1, 
+        isAdmin: 1, 
+        pushNotificationToken: 1, 
+        isComplete: 1,
+        isBiometric:1,
+        lastSeen: 1,
+        subRegion: 1,
+        online: 1,
+        hasPendingRequest: 1
+        }).sort({date: 1});
+
+    //console.log(user);
+
     res.send(user);
 
 });
@@ -51,17 +181,17 @@ router.post('/', async (req, res) => {
     if(error) return res.status(404).send({error: true, message: error.details[0].message});
 
     // look up the user
-    let user = await User.findOne({email: req.body.email});
+    let user = await User.findOne({phoneNumber: req.body.phoneNumber});
 
     if(user){ return res.status(400).send({error: true, message: 'User already registered!'});}
 
-     user = new  User(_.pick(req.body, ['name', 'email', 'password']));
+    user = new  User(_.pick(req.body, ['firstName','lastName', 'phoneNumber', 'password']));
 
-     const salt = await bcrypt.genSalt(15);
-     user.password = await bcrypt.hash(user.password, salt);
+    const salt     = await bcrypt.genSalt(15);
+    user.password  = await bcrypt.hash(user.password, salt);
 
     await user.save();
-
+    console.log("after data saved! 64");
     // before sending response to the client, please generate the token
     //const token = jwt.sign({_id: user._id}, config.get('jwtPrivateKey'));
     const token = user.generateAuthToken();
@@ -69,8 +199,30 @@ router.post('/', async (req, res) => {
     // add token into user  and return it
     user['webtoken'] = token;
 
-   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email', 'webtoken', '_id']));
+   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'firstName','lastName', 'phoneNumber', 'webtoken', '_id']));
     
+});
+
+
+router.put('/password/:id', async (req, res) => {
+
+    const id = req.params.id;
+
+    const foundUser         = User.findOne({_id: id});
+    if(!foundUser) return res.status(404).send({error: true, message: "User not found!"});
+
+    //console.log(req.body)
+    const salt          = await bcrypt.genSalt(15);
+    const password      = await bcrypt.hash(req.body.password, salt);
+
+    const user = await User.findByIdAndUpdate(id, {
+        $set:{password: password}
+      }, {new : true});
+
+      if(!user) return res.status(404).send({error: true, message: `user with id ${id} not found!`});
+      // test push notofication
+      //pushNotification([req.body.pushNotificationToken], "We have a message for you!");
+      res.send(user);
 });
 
 
@@ -78,17 +230,11 @@ router.put('/:id', auth, async (req, res) => {
 
     const id = req.params.id;
 
-    const {error} = validate(req.body, true, true);
-    if(error) return res.status(404).send({error: true, message: error.details[0].message});
-
-    //console.log(req.body)
-
+    const found = User.findOne({_id: id});
+    if(!found) return res.status(404).send({error: true, message: `User with the id ${id}, not found!`});
+    //console.log(req.body);
     const user = await User.findByIdAndUpdate(id, {
-        $set:{
-            name: req.body.name,
-            email: req.body.email,
-            pushNotificationToken: req.body.pushNotificationToken ?  req.body.pushNotificationToken: req.user.pushNotificationToken
-        }
+        $set:{...req.body}
       }, {new : true});
 
       if(!user) return res.status(404).send({error: true, message: `user with id ${id} not found!`});

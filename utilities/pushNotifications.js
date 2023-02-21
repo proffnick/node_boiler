@@ -1,6 +1,6 @@
 const { Expo } =  require('expo-server-sdk');
 
-const pushNotification = async (expoNotificationTokens = [], message) => {
+const pushNotification = async (expoNotificationTokens = [], message, data = {}, title = "New Pickup Request") => {
     let expo = new Expo();
 
     // create the message
@@ -18,8 +18,10 @@ const pushNotification = async (expoNotificationTokens = [], message) => {
         messages.push({
           to: pushToken,
           sound: 'default',
+          title: title,
           body: message,
-          data: { withSome: 'data', "_displayInForeground": true },
+          data: { ...data, "_displayInForeground": true },
+          channelId: "psa-default"
         })
       }
 
@@ -92,6 +94,8 @@ const pushNotification = async (expoNotificationTokens = [], message) => {
         }
     }
     })(); */
+
+    return true;
 
 }
 
