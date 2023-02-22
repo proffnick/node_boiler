@@ -1,5 +1,5 @@
 const { apiClient } = require('../api/client');
-const config    = require('config');
+const config        = require('config');
 
     function sendMail(to, subject, message){
 		
