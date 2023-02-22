@@ -1,8 +1,8 @@
 module.exports = {
     apps : [{
       name   : "psa-logistics",
-      script : "./index.js",
-      watch: ["./package.json", "./middleware", "./model", "./routes", "./startup", "./db", "./config", "./index.js"],
+      script : "/home/ec2-user/apps/psa/index.js",
+      watch: ["/home/ec2-user/apps/psa/package.json", "/home/ec2-user/apps/psa/middleware", "/home/ec2-user/apps/psa/model", "/home/ec2-user/apps/psa/routes", "/home/ec2-user/apps/psa/startup", "/home/ec2-user/apps/psa/db", "/home/ec2-user/apps/psa/config", "/home/ec2-user/apps/psa/index.js"],
       env: {
         NODE_ENV: "development",
       },
@@ -12,7 +12,7 @@ module.exports = {
     }, 
     {
         name: "new_orders",
-        script: "./bin/new_orders.js",
+        script: "/home/ec2-user/apps/psa/bin/new_orders.js",
         env: {
           NODE_ENV: "development",
         },
