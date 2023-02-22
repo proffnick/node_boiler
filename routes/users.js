@@ -54,7 +54,6 @@ router.get('/', auth, async (req, res) => {
 });
 
 router.get('/active/riders', async (req, res)=>{
-    // check if genres available
     if(!req.query.active) return res.status(404).send({error: true, message: 'Bad Request'});
     const query = JSON.parse(decodeURI(req.query.active));
    // console.log(JSON.stringify(query));
