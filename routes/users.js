@@ -18,7 +18,7 @@ const router    = express.Router();
                 router.all('*', cors());
 
 // request for all customers
-router.get('/', async (req, res)=>{
+router.get('/', auth, async (req, res)=>{
     // check if genres available
     const user = await User.find().select({
         firstName: 1, 
