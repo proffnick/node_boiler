@@ -12,7 +12,13 @@ module.exports = {
     }, 
     {
         name: "new_orders",
-        script: "./bin/new_orders.js"
+        script: "./bin/new_orders.js",
+        env: {
+          NODE_ENV: "development",
+        },
+        env_production: {
+          NODE_ENV: "production",
+        }
     }
     ]
   }
