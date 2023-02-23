@@ -1,0 +1,23 @@
+{
+    "jwtPrivateKey": "PSAprivateKey",
+    "db": "mongodb+srv://psaapp1:Jk4fHPpuJter1r7n@psalogistics.aysmc7x.mongodb.net/psa_db?retryWrites=true&w=majority",
+    "auth": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhmMTMzYmQ2YTI1YzY0MDE4NjllZGYiLCJpc0FkbWluIjpmYWxzZSwiZW1haWwiOiJuaWNrbWJlcmV2QGdtYWlsLmNvbSIsImFwcHJvdmVkIjpmYWxzZSwiZmlyc3ROYW1lIjoiTmljaG9sYXMiLCJsYXN0TmFtZSI6Ik1iZXJldiIsInBob25lTnVtYmVyIjoiMjM0ODEzMzE5MTQyNiIsInVzZXJUeXBlIjoicmlkZXIiLCJwcm9maWxlSW1hZ2UiOnsiZmlsZUlkIjoiNjJiOTM1ZjQxZDk2Y2JjZmE5NjQ5Nzk3IiwibmFtZSI6InBzYV9maWxlX0hSS2JfcE1LVCIsInNpemUiOjg5ODQ0MywidmVyc2lvbkluZm8iOnsiaWQiOiI2MmI5MzVmNDFkOTZjYmNmYTk2NDk3OTciLCJuYW1lIjoiVmVyc2lvbiAxIn0sImZpbGVQYXRoIjoiL3BzYV9maWxlX0hSS2JfcE1LVCIsInVybCI6Imh0dHBzOi8vaWsuaW1hZ2VraXQuaW8vcWxhbWlpa2l5L3BzYV9maWxlX0hSS2JfcE1LVCIsImZpbGVUeXBlIjoiaW1hZ2UiLCJoZWlnaHQiOjEyMDAsIndpZHRoIjoxMjAwLCJ0aHVtYm5haWxVcmwiOiJodHRwczovL2lrLmltYWdla2l0LmlvL3FsYW1paWtpeS90cjpuLWlrX21sX3RodW1ibmFpbC9wc2FfZmlsZV9IUktiX3BNS1QiLCJBSVRhZ3MiOm51bGx9LCJpc0NvbXBsZXRlIjp0cnVlLCJpc0Jpb21ldHJpYyI6dHJ1ZSwicHVzaE5vdGlmaWNhdGlvblRva2VuIjoiIiwiaWF0IjoxNjU3NzY0Mzg4fQ.EhWvW2r8j_90mGUKktccXumrGZgv_hukwVdB7N_ONBo",
+    "assets": "http://3.76.47.121:5555/assets",
+    "port": 5555,
+    "kitEndPoint": "https://ik.imagekit.io/qlamiikiy",
+    "kitPrivate": "private_PyRqNYQGA0doLkOSirAKRMOSLzI=",
+    "kitPublic": "public_jzZM6InRMYTKK4uQVeVM29fWfIk=",
+    "baseUrl": "http://3.76.47.121:5555/api",
+    "defaultEmail": "psaapp1@gmail.com",
+    "termiiKey": "TLr8lsNu4RLHDNbvyxNzw6wnajQRlRM8dLe1oSNlcC20EKEw3uKrAvu6yd48gN",
+    "termiiSendUrl": "https://api.ng.termii.com/api/sms/otp/send",
+    "termiiSendUrlSMS": "https://api.ng.termii.com/api/sms/send",
+    "paystackPrivateKey": "sk_test_dc047d570d769725d69aa7fc179ca705f30a6615",
+    "paystackBaseUrl": "https://api.paystack.co",
+    "sendMailPath":"http://3.76.47.121:5555/api/mails",
+    "gmailClientId": "315274394082-rbe14mj6jte0nr7079o0iu82d2grus9g.apps.googleusercontent.com",
+    "gmailClientSecret": "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",
+    "gmailRefreshToken": "1//03cy6ak9DiI4KCgYIARAAGAMSNwF-L9IrkC6FxiKOj0-uQuQMV6ffxXtQ7sNZTLVSTLeR7O-lNxnDE9eckE4MxsCCF6kZSBNovO0",
+    "gmailRedirectUrl": "https://psalogistics.ng/oauth/",
+    "psaObjectId": "62ec780ffd7df49d0b2a927c"
+}
