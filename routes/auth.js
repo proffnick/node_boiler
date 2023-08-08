@@ -12,6 +12,17 @@ const cors = require('cors');
 const router = express.Router();
 router.all('*', cors());
 
+
+// getting details test
+
+router.get('/', async (req, res) => {
+    try {
+        res.send({status: true, data: req.query})
+    } catch (error) {
+        res.send({status: false, message: "Error happened!"});
+    }
+});
+
 // processing login
 router.post('/', async (req, res) => {
     try {
