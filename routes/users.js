@@ -9,7 +9,7 @@ const {User, validate} = require('../model/users');
 
 // push notification
 
-//const pushNotification = require('../utilities/pushNotifications');
+// const pushNotification = require('../utilities/pushNotifications');
 
 // require express
 const express   = require('express');

@@ -6,11 +6,11 @@ const bcrypt = require('bcrypt');
 const _ = require('lodash');
 // require model
 const { User } = require('../model/users');
-
 // require express
 const express = require('express');
-
+const cors = require('cors');
 const router = express.Router();
+router.all('*', cors());
 
 // processing login
 router.post('/', async (req, res) => {
