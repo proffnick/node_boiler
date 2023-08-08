@@ -29,8 +29,9 @@ router.post('/', async (req, res) => {
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if(!validPassword) return  res.status(400).send({error: true, message: 'Invalid Phone Number or Password'});
 
+        // return user details except password
         const token = user.generateAuthToken();
-        res.send({success: true, token}); 
+        res.send({success: true, token, user: {...user, password: ''}}); 
     } catch (error) {
         return res.status(500).send({error: true, message: (error?.message)});
     }  

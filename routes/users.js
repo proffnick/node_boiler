@@ -207,23 +207,28 @@ router.post('/', async (req, res) => {
 
 router.put('/password/:id', async (req, res) => {
 
-    const id = req.params.id;
+    try {
+        const id = req.params.id;
 
-    const foundUser         = User.findOne({_id: id});
-    if(!foundUser) return res.status(404).send({error: true, message: "User not found!"});
-
-    //console.log(req.body)
-    const salt          = await bcrypt.genSalt(15);
-    const password      = await bcrypt.hash(req.body.password, salt);
-
-    const user = await User.findByIdAndUpdate(id, {
-        $set:{password, salt}
-      }, {new : true});
-
-      if(!user) return res.status(404).send({error: true, message: `user with id ${id} not found!`});
-      // test push notofication
-      //pushNotification([req.body.pushNotificationToken], "We have a message for you!");
-      res.send(user);
+        const foundUser         = User.findOne({_id: id});
+        if(!foundUser) return res.status(404).send({error: true, message: "User not found!"});
+    
+        //console.log(req.body)
+        const salt          = await bcrypt.genSalt(15);
+        const password      = await bcrypt.hash(req.body.password, salt);
+    
+        const user = await User.findByIdAndUpdate(id, {
+            $set:{password, salt}
+          }, {new : true});
+    
+          if(!user) return res.status(404).send({error: true, message: `user with id ${id} not found!`});
+          // test push notofication
+          //pushNotification([req.body.pushNotificationToken], "We have a message for you!");
+          res.send(user);
+    } catch (error) {
+        return res.status(500).send({error: true, message: (error?.message)});  
+    }
+   
 });
 
 
