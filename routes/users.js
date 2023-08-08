@@ -217,7 +217,7 @@ router.put('/password/:id', async (req, res) => {
     const password      = await bcrypt.hash(req.body.password, salt);
 
     const user = await User.findByIdAndUpdate(id, {
-        $set:{password: password}
+        $set:{password, salt}
       }, {new : true});
 
       if(!user) return res.status(404).send({error: true, message: `user with id ${id} not found!`});

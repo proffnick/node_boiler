@@ -12,25 +12,30 @@ const express = require('express');
 
 const router = express.Router();
 
-// adding a new genre
+// processing login
 router.post('/', async (req, res) => {
+    try {
+        const allowed = (req?.body?.rtype) ? true: false;
+        const {error} = validate(req.body, allowed);
+        // if allowed to check rtype and no admin ID provided return
 
-    const {error} = validate(req.body);
-    
         if(error) return res.status(404).send({error: true, message: error.details[0].message});
-    
+
         // look up the user
         let user = await User.findOne({phoneNumber: req.body.phoneNumber});
-    
+
         if(!user) return res.status(400).send({error: true, message: 'Invalid Phone Number or Password'});
-    
+
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if(!validPassword) return  res.status(400).send({error: true, message: 'Invalid Phone Number or Password'});
 
         const token = user.generateAuthToken();
-        res.send({success: true, token});
-        
-    });
+        res.send({success: true, token}); 
+    } catch (error) {
+        return res.status(500).send({error: true, message: (error?.message)});
+    }  
+});
+
 router.post('/bio', async (req, res) => {
         
             if(!(req?.body?.phoneNumber)) return res.status(404).send({error: true, message: "Invalid attempt"});
@@ -71,12 +76,12 @@ router.post('/bio', async (req, res) => {
 });
 
     // validate genre 
-function validate(user){
+function validate(user, allow=false){
     const schema = Joi.object({
         phoneNumber: Joi.string().required().min(10).max(13),
         password:  Joi.string().required().min(4).max(255)
     });
-    return schema.validate(user);
+    return schema.validate(user, {allowUnknown: allow});
 }
 
 module.exports = router;
