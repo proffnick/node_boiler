@@ -23,34 +23,7 @@ router.post('/', async (req, res) => {
         if(error) return res.status(404).send({error: true, message: error.details[0].message});
 
         // look up the user
-        let user = await User.findOne({phoneNumber: req.body.phoneNumber}).select({
-            firstName: 1, 
-            lastName: 1, 
-            phoneNumber: 1, 
-            email: 1, 
-            officeAddress: 1, 
-            addressCoords: 1, 
-            currentLocation: 1, 
-            profileImage: 1, 
-            password: 1,
-            date: 1, 
-            userType: 1, 
-            numberOfRides: 1, 
-            averageRequests: 1, 
-            meansOfIdentity: 1, 
-            identity: 1, 
-            approved: 1, 
-            region: 1,  
-            country: 1, 
-            isAdmin: 1, 
-            pushNotificationToken: 1, 
-            isComplete: 1,
-            isBiometric: 1,
-            lastSeen: 1,
-            subRegion: 1,
-            online: 1,
-            hasPendingRequest: 1    
-        });
+        let user = await User.findOne({phoneNumber: req.body.phoneNumber});
 
         if(!user) return res.status(400).send({error: true, message: 'Invalid Phone Number or Password or user not found!'});
 
@@ -59,7 +32,7 @@ router.post('/', async (req, res) => {
 
         // return user details except password
         const token = user.generateAuthToken();
-        res.send({success: true, token, user: {...user, password: ''}}); 
+        res.send({success: true, token, user: {...user?._doc, password: ''}}); 
     } catch (error) {
         return res.status(500).send({error: true, message: (error?.message)});
     }  
