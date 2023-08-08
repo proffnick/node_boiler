@@ -13,16 +13,6 @@ const router = express.Router();
 router.all('*', cors());
 
 
-// getting details test
-
-router.get('/', async (req, res) => {
-    try {
-        res.send({status: true, data: req.query})
-    } catch (error) {
-        res.send({status: false, message: "Error happened!"});
-    }
-});
-
 // processing login
 router.post('/', async (req, res) => {
     try {
@@ -35,10 +25,10 @@ router.post('/', async (req, res) => {
         // look up the user
         let user = await User.findOne({phoneNumber: req.body.phoneNumber});
 
-        if(!user) return res.status(400).send({error: true, message: 'Invalid Phone Number or Password'});
+        if(!user) return res.status(400).send({error: true, message: 'Invalid Phone Number or Password or user not found!'});
 
         const validPassword = await bcrypt.compare(req.body.password, user.password);
-        if(!validPassword) return  res.status(400).send({error: true, message: 'Invalid Phone Number or Password'});
+        if(!validPassword) return  res.status(400).send({error: true, message: 'Invalid Phone Number or Password or wrong combination'});
 
         // return user details except password
         const token = user.generateAuthToken();
