@@ -88,6 +88,22 @@ router.get('/active/riders', async (req, res)=>{
 
 });
 
+router.get('/count-all-users', auth, async (req, res) => {
+    try {   
+        const dt = (req.query?.where) ? JSON.parse(decodeURIComponent(req.query?.where)): {};
+       User.countDocuments(dt)
+        .then((count) => {
+            return res.status(200).send({status: true, total: count});
+        })
+        .catch((error) => {
+           return res.status(500).send({status: false, message: error?.message});
+        });
+
+    } catch (error) {
+     res.status(500).send({status: false, message: error?.message}); 
+    }
+});
+
 
 router.get('/:id', async (req, res)=>{
     // check if genres available
