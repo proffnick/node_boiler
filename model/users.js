@@ -118,7 +118,7 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     deviceType: {
-        type: "",
+        type: String,
         default: "android"
     },
     hasPendingRequest: {
