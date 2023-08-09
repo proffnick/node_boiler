@@ -61,7 +61,7 @@ router.get('/new_orders', auth, async (req, res) => {
 router.get('/count-all-orders', auth, async (req, res) => {
     try {   
        const dt = (req.query?.where) ? JSON.parse(decodeURIComponent(req.query.where)): {};
-       User.countDocuments(dt)
+       Orders.countDocuments(dt)
         .then((count) => {
             return res.status(200).send({status: true, total: count});
         })
