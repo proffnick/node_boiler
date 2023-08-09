@@ -74,6 +74,33 @@ router.get('/count-all-orders', auth, async (req, res) => {
     }
 });
 
+router.get('/sum-all-amount', auth, async (req, res) => {
+    try {   
+       Orders.aggregate([
+            {
+              $group: {
+                _id: null,
+                totalAmount: { $sum: '$cost' },
+              },
+            },
+          ])
+        .then((result) => {
+            if (result.length > 0) {
+            const totalBalance = result[0].totalAmount;
+            return res.status(200).send({status: true, amount: totalBalance});
+            } else {
+             return res.status(404).send({status: true, amount: 0});
+            }
+        })
+        .catch((error) => {
+           return res.status(500).send({status: false, message: error?.message});
+        });
+
+    } catch (error) {
+     res.status(500).send({status: false, message: error?.message}); 
+    }
+});
+
 // find by ID
 
 router.get('/:id', auth, async (req, res) => {
