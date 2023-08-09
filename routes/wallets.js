@@ -27,6 +27,32 @@ router.get('/', auth, async (req, res) => {
 });
 
 // find by ID
+router.get('/get-all-balances', auth, async (req, res) => {
+    try {   
+       Wallets.aggregate([
+            {
+              $group: {
+                _id: null,
+                totalBalance: { $sum: '$balance' },
+              },
+            },
+          ])
+        .then((result) => {
+            if (result.length > 0) {
+            const totalBalance = result[0].totalBalance;
+            return res.status(200).send({status: true, balance: totalBalance});
+            } else {
+             return res.status(404).send({status: true, balance: 0});
+            }
+        })
+        .catch((error) => {
+           return res.status(500).send({status: false, message: error?.message});
+        });
+
+    } catch (error) {
+     res.status(500).send({status: false, message: error?.message}); 
+    }
+});
 
 router.get('/:id', async (req, res) => {
     const wallets = await Wallets.findOne({_id: req.params.id});
