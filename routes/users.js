@@ -209,7 +209,7 @@ router.post('/fetch-users', auth, async (req, res) => {
 
         console.log(query, " the query strings");
 
-        const users = User
+        const users = await User
         .find(query)
         .limit(limit)
         .skip( !(isNaN(skip)) ? skip: 0 )
