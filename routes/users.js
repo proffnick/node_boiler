@@ -104,7 +104,92 @@ router.get('/count-all-users', auth, async (req, res) => {
     }
 });
 
-router.post('fetch-users', auth, async (req, res) => {
+router.get('/:id', async (req, res)=>{
+    // check if genres available
+    try {
+        const user = await User.findOne({_id: req.params.id}).select({
+            firstName: 1, 
+            lastName: 1, 
+            phoneNumber: 1, 
+            email: 1, 
+            officeAddress: 1, 
+            addressCoords: 1, 
+            currentLocation: 1, 
+            profileImage: 1, 
+            date: 1, 
+            userType: 1, 
+            numberOfRides: 1, 
+            averageRequests: 1, 
+            meansOfIdentity: 1, 
+            identity: 1, 
+            approved: 1, 
+            region: 1,  
+            country: 1, 
+            isAdmin: 1, 
+            pushNotificationToken: 1, 
+            isComplete: 1,
+            isBiometric: 1,
+            lastSeen: 1,
+            subRegion: 1,
+            online: 1,
+            hasPendingRequest: 1
+            }).sort({date: 1});
+        res.send(user);
+    } catch (error) {
+        res.status(404).send({error: true, message: "request not found"})
+    }
+    
+
+});
+
+// get single user
+router.get('/me', auth, async (req, res)=>{
+    // check if genres available
+    const user = await User.findById(req.user._id).select('-password');
+    res.send(user); 
+
+});
+
+router.post('/find', async (req, res)=>{
+    const error = !req.body.hasOwnProperty('phoneNumber') ? true : false;
+
+    if(error) return res.status(400).send({error: true, message: 'Bad Request'});
+    // check if users available
+    const user = await User.findOne({phoneNumber: req.body.phoneNumber}).select({
+        firstName: 1, 
+        lastName: 1, 
+        phoneNumber: 1, 
+        email: 1, 
+        officeAddress: 1, 
+        addressCoords: 1, 
+        currentLocation: 1, 
+        profileImage: 1, 
+        date: 1, 
+        userType: 1, 
+        numberOfRides: 1, 
+        averageRequests: 1, 
+        meansOfIdentity: 1, 
+        identity: 1, 
+        approved: 1, 
+        region: 1,  
+        country: 1, 
+        isAdmin: 1, 
+        pushNotificationToken: 1, 
+        isComplete: 1,
+        isBiometric:1,
+        lastSeen: 1,
+        subRegion: 1,
+        online: 1,
+        hasPendingRequest: 1
+        }).sort({date: 1});
+
+    //console.log(user);
+
+    res.send(user);
+
+});
+
+router.post('/fetch-users', auth, async (req, res) => {
     try {
         const query = {};
         const { 
@@ -166,92 +251,6 @@ router.post('fetch-users', auth, async (req, res) => {
     } catch (error) {
       return res.status(500).send({status: false, message: error?.message});  
     }
-});
-
-
-router.get('/:id', async (req, res)=>{
-    // check if genres available
-    try {
-        const user = await User.findOne({_id: req.params.id}).select({
-            firstName: 1, 
-            lastName: 1, 
-            phoneNumber: 1, 
-            email: 1, 
-            officeAddress: 1, 
-            addressCoords: 1, 
-            currentLocation: 1, 
-            profileImage: 1, 
-            date: 1, 
-            userType: 1, 
-            numberOfRides: 1, 
-            averageRequests: 1, 
-            meansOfIdentity: 1, 
-            identity: 1, 
-            approved: 1, 
-            region: 1,  
-            country: 1, 
-            isAdmin: 1, 
-            pushNotificationToken: 1, 
-            isComplete: 1,
-            isBiometric: 1,
-            lastSeen: 1,
-            subRegion: 1,
-            online: 1,
-            hasPendingRequest: 1
-            }).sort({date: 1});
-        res.send(user);
-    } catch (error) {
-        res.status(404).send({error: true, message: "request not found"})
-    }
-    
-
-});
-
-router.post('/find', async (req, res)=>{
-    const error = !req.body.hasOwnProperty('phoneNumber') ? true : false;
-
-    if(error) return res.status(400).send({error: true, message: 'Bad Request'});
-    // check if users available
-    const user = await User.findOne({phoneNumber: req.body.phoneNumber}).select({
-        firstName: 1, 
-        lastName: 1, 
-        phoneNumber: 1, 
-        email: 1, 
-        officeAddress: 1, 
-        addressCoords: 1, 
-        currentLocation: 1, 
-        profileImage: 1, 
-        date: 1, 
-        userType: 1, 
-        numberOfRides: 1, 
-        averageRequests: 1, 
-        meansOfIdentity: 1, 
-        identity: 1, 
-        approved: 1, 
-        region: 1,  
-        country: 1, 
-        isAdmin: 1, 
-        pushNotificationToken: 1, 
-        isComplete: 1,
-        isBiometric:1,
-        lastSeen: 1,
-        subRegion: 1,
-        online: 1,
-        hasPendingRequest: 1
-        }).sort({date: 1});
-
-    //console.log(user);
-
-    res.send(user);
-
-});
-
-// get single user
-router.get('/me', auth, async (req, res)=>{
-    // check if genres available
-    const user = await User.findById(req.user._id).select('-password');
-    res.send(user); 
-
 });
 
 // adding a new user
