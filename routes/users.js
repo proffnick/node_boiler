@@ -212,7 +212,7 @@ router.post('/fetch-users', auth, async (req, res) => {
         const users = User
         .find(query)
         .limit(limit)
-        .skip( !(NaN(skip)) ? skip: 0 )
+        .skip( !(isNaN(skip)) ? skip: 0 )
         .select({
             firstName: 1, 
             lastName: 1, 
