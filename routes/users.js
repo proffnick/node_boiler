@@ -104,6 +104,70 @@ router.get('/count-all-users', auth, async (req, res) => {
     }
 });
 
+router.post('fetch-users', auth, async (req, res) => {
+    try {
+        const query = {};
+        const { 
+            child, 
+            value, 
+            startDate,  
+            endDate, 
+            limit,
+            skip
+        } = req.body;
+        if( child ) query[child] = value;
+        if( startDate && endDate ) { 
+            const isoDateStart  = new Date(startDate).toISOString();
+            const isoDateEnd    = new Date(endDate).toISOString();
+            query[`$and`] = [{date: {$gte: isoDateStart}}, {date: {$lte: isoDateEnd}}];
+        }
+
+        console.log(query, " the query strings");
+
+        const users = User
+        .find(query)
+        .limit(limit)
+        .skip( !(NaN(skip)) ? skip: 0 )
+        .select({
+            firstName: 1, 
+            lastName: 1, 
+            phoneNumber: 1, 
+            email: 1, 
+            officeAddress: 1, 
+            addressCoords: 1, 
+            currentLocation: 1, 
+            profileImage: 1, 
+            date: 1, 
+            userType: 1, 
+            numberOfRides: 1, 
+            averageRequests: 1, 
+            meansOfIdentity: 1, 
+            identity: 1, 
+            approved: 1, 
+            region: 1,  
+            country: 1, 
+            isAdmin: 1, 
+            pushNotificationToken: 1, 
+            isComplete: 1,
+            isBiometric: 1,
+            lastSeen: 1,
+            subRegion: 1,
+            hasPendingRequest: 1,
+            online: 1        
+        }).sort({date: -1});
+        
+        // total details
+        const total = await User.countDocuments(query);
+
+        console.log(users, total);
+
+        return res.status(200).send({status: true, total: total, data: users});
+
+    } catch (error) {
+      return res.status(500).send({status: false, message: error?.message});  
+    }
+});
+
 
 router.get('/:id', async (req, res)=>{
     // check if genres available
