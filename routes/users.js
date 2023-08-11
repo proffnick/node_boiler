@@ -214,6 +214,7 @@ router.post('/fetch-users', auth, async (req, res) => {
         .limit(limit)
         .skip( !(isNaN(skip)) ? skip: 0 )
         .select({
+            _id: 1,
             firstName: 1, 
             lastName: 1, 
             phoneNumber: 1, 
