@@ -108,6 +108,7 @@ router.get('/:id', async (req, res)=>{
     // check if genres available
     try {
         const user = await User.findOne({_id: req.params.id}).select({
+            _id: 1,
             firstName: 1, 
             lastName: 1, 
             phoneNumber: 1, 
@@ -132,6 +133,7 @@ router.get('/:id', async (req, res)=>{
             lastSeen: 1,
             subRegion: 1,
             online: 1,
+            deviceType: 1,
             hasPendingRequest: 1
             }).sort({date: 1});
         res.send(user);
