@@ -235,6 +235,7 @@ router.post('/fetch-users', auth, async (req, res) => {
             pushNotificationToken: 1, 
             isComplete: 1,
             isBiometric: 1,
+            deviceType: 1,
             lastSeen: 1,
             subRegion: 1,
             hasPendingRequest: 1,
