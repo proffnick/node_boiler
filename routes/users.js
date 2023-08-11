@@ -47,7 +47,10 @@ router.get('/', auth, async (req, res) => {
         lastSeen: 1,
         subRegion: 1,
         hasPendingRequest: 1,
-        online: 1
+        online: 1,
+        accountStatus: 1,
+        userRole: 1,
+        _id: 1
         }).sort({date: 1});
     res.send(user);
 
@@ -82,7 +85,10 @@ router.get('/active/riders', async (req, res)=>{
         lastSeen: 1,
         subRegion: 1,
         online: 1,
-        hasPendingRequest: 1
+        hasPendingRequest: 1,
+        accountStatus: 1,
+        userRole: 1,
+        _id: 1
         }).sort({date: 1});
     res.send(users);
 
@@ -134,7 +140,9 @@ router.get('/:id', async (req, res)=>{
             subRegion: 1,
             online: 1,
             deviceType: 1,
-            hasPendingRequest: 1
+            hasPendingRequest: 1,
+            accountStatus: 1,
+            userRole: 1
             }).sort({date: 1});
         res.send(user);
     } catch (error) {
@@ -182,7 +190,10 @@ router.post('/find', async (req, res)=>{
         lastSeen: 1,
         subRegion: 1,
         online: 1,
-        hasPendingRequest: 1
+        hasPendingRequest: 1,
+        accountStatus: 1,
+        userRole: 1,
+        _id: 1
         }).sort({date: 1});
 
     //console.log(user);
@@ -242,7 +253,9 @@ router.post('/fetch-users', auth, async (req, res) => {
             lastSeen: 1,
             subRegion: 1,
             hasPendingRequest: 1,
-            online: 1        
+            online: 1,
+            accountStatus: 1,
+            userRole: 1        
         }).sort({date: -1});
         
         // total details

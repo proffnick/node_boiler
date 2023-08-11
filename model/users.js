@@ -64,6 +64,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    userRole: {
+        type: String,
+        default: "PUBLIC"
+    },// ADMINISTRATOR // CUSTOMERCARE // SUPERUSER // PUBLIC
     numberOfRides: {
         type: Number,
         default: 0
@@ -128,7 +132,11 @@ const userSchema = new mongoose.Schema({
     isComplete: {
         type: Boolean,
         default: false
-    }
+    },
+    accountStatus: {
+        type: String,
+        default: "ACTIVE"
+    }// SUSPENDED // CLOSED // 
 
 }, {timestamps: {createdAt: 'createdAt'}});
 
