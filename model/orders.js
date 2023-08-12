@@ -70,7 +70,24 @@ const OrdersSchema = new mongoose.Schema({
     deleted: {
         type: Boolean,
         default: false
-    } 
+    },
+    customerEmail: {
+        type: String,
+        required: true,
+    },
+    riderEmail: {
+        type: String,
+        default: ''
+    },
+    orderId: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    orderConfirmationCode: {
+        type: String,
+        default: ''
+    }, 
 
 },  {timestamps: {lastUpdated: "lastUpdated"}});
 
@@ -101,6 +118,7 @@ function validateOrders(body, unknown = false){
         weight: Joi.string().required().max(255), 
         pickup: Joi.object().required(), 
         deliver: Joi.object().required(), 
+        customerEmail: Joi.string().email().required(),
         customer: Joi.objectId().required(),
         cost:Joi.number().required().min(1)
     });

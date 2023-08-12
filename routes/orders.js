@@ -27,7 +27,11 @@ router.get('/', auth, async (req, res) => {
                 rider:1, 
                 cost:1, 
                 status:1, 
-                state:1, 
+                state:1,
+                customerEmail: 1,
+                riderEmail: 1,
+                orderId: 1,
+                orderConfirmationCode: 1, 
                 date:1}).sort({date: 1}) : 
                 await Orders.find().select(
                 {_id: 1, 
@@ -44,15 +48,97 @@ router.get('/', auth, async (req, res) => {
                 status:1, 
                 riderEnded: 1,
                 customerConfirmed:1,
-                state:1, 
+                state:1,
+                customerEmail: 1,
+                riderEmail: 1,
+                orderId: 1,
+                orderConfirmationCode: 1, 
                 date:1}).sort({date: 1});
     res.send(orders);
+});
+
+router.post('/fetch-orders', auth, async (req, res) => {
+    try {
+        const query = {};
+        const { 
+            child, 
+            value, 
+            startDate,  
+            endDate, 
+            limit,
+            skip
+        } = req.body;
+        if( child ) query[child] = value;
+        if( startDate && endDate ) { 
+            const isoDateStart  = new Date(startDate).toISOString();
+            const isoDateEnd    = new Date(endDate).toISOString();
+            query[`$and`] = [{date: {$gte: isoDateStart}}, {date: {$lte: isoDateEnd}}];
+        }
+
+        console.log(query, " the query strings");
+
+        const orders = await Orders
+        .find(query)
+        .limit(limit)
+        .skip( !(isNaN(skip)) ? skip: 0 )
+        .select({
+            _id: 1,
+            item:1, 
+            itemDesc: 1,
+            distance:1, 
+            quantity:1, 
+            weight:1, 
+            pickup:1, 
+            deliver:1, 
+            customer:1, 
+            rider:1, 
+            cost:1, 
+            status:1, 
+            state:1,
+            customerEmail: 1,
+            riderEmail: 1,
+            orderId: 1,
+            orderConfirmationCode: 1,
+            date:1        
+        }).sort({date: -1});
+        
+        // total details
+        const total = await Orders.countDocuments(query);
+
+        console.log(orders, total);
+
+        return res.status(200).send({status: true, total: total, data: orders});
+
+    } catch (error) {
+      return res.status(500).send({status: false, message: error?.message});  
+    }
 });
 
 router.get('/new_orders', auth, async (req, res) => {
     // name
     //console.log("Was this called at all ?");
-    const orders = await Orders.find({$and: [{status: false}, {state: 'requested'}]}).select({_id: 1, item:1, itemDesc:1,distance:1, quantity:1, weight:1, pickup:1, deliver:1, customer:1, rider:1, cost:1, status:1, state:1, date:1,riderEnded:1,customerConfirmed:1}).sort({date: 1});
+    const orders = await Orders.find({$and: [{status: false}, {state: 'requested'}]}).select({
+        _id: 1, 
+        item:1, 
+        itemDesc:1,
+        distance:1, 
+        quantity:1, 
+        weight:1, 
+        pickup:1, 
+        deliver:1, 
+        customer:1, 
+        rider:1, 
+        cost:1, 
+        status:1, 
+        state:1, 
+        date:1,
+        riderEnded:1,
+        customerEmail: 1,
+        riderEmail: 1,
+        orderId: 1,
+        orderConfirmationCode: 1,
+        customerConfirmed:1
+        }).sort({date: 1});
     //console.log(orders, "gotten orders");
     res.send(orders);
 });
@@ -152,7 +238,27 @@ router.get('/fetch/orderlist/:customer', auth, async (req, res) => {
                     .find({customer: req.params.customer})
                     .skip((page - 1) * perPage)
                     .limit(perPage)
-                    .select({item:1,itemDesc: 1, quantity:1, distance: 1, weight:1, pickup:1, deliver:1, customer:1, rider:1, cost:1, status:1, state:1, date:1,riderEnded:1,customerConfirmed:1})
+                    .select({
+                        _id: 1,
+                        item:1,
+                        itemDesc: 1, 
+                        quantity:1, 
+                        distance: 1, 
+                        weight:1, 
+                        pickup:1, 
+                        deliver:1, 
+                        customer:1, 
+                        rider:1, 
+                        cost:1, 
+                        status:1, 
+                        state:1, 
+                        date:1,
+                        riderEnded:1,
+                        customerEmail: 1,
+                        riderEmail: 1,
+                        orderId: 1,
+                        orderConfirmationCode: 1,
+                        customerConfirmed:1})
                     .sort({date: -1});
     res.send(orders);
 });
@@ -169,6 +275,7 @@ router.get('/fetch/existing-order/:customer', auth, async (req, res) => {
                                     {customerConfirmed: false}
                                 ]})
                         .select({
+                            _id: 1,
                             item:1,
                             itemDesc: 1, 
                             quantity:1, 
@@ -182,6 +289,10 @@ router.get('/fetch/existing-order/:customer', auth, async (req, res) => {
                             status:1, 
                             state:1,
                             riderEnded: 1, 
+                            customerEmail: 1,
+                            riderEmail: 1,
+                            orderId: 1,
+                            orderConfirmationCode: 1,
                             customerConfirmed:1,
                             date:1})
                         .sort({lastUpdated: -1});
@@ -207,6 +318,7 @@ router.get('/fetch/order-for-rider/:rider', auth, async (req, res) => {
                                     {riderEnded: false}
                                 ]})
                         .select({
+                            _id: 1,
                             item:1,
                             itemDesc: 1, 
                             quantity:1, 
@@ -220,6 +332,10 @@ router.get('/fetch/order-for-rider/:rider', auth, async (req, res) => {
                             status:1, 
                             state:1,
                             riderEnded:1, 
+                            customerEmail: 1,
+                            riderEmail: 1,
+                            orderId: 1,
+                            orderConfirmationCode: 1,
                             customerConfirmed:1,
                             date:1})
                         .sort({lastUpdated: -1});
@@ -300,11 +416,57 @@ router.post('/', async (req,  res) => {
      // look up the user
      let orders = null;
 
-     orders = new Orders(_.pick(req.body, ["item", "itemDesc", "distance", "quantity", "weight", "pickup", "deliver", "customer", "cost"])); // pick
+     const generateOrderID = async () => {
+        const idLength = 12;
+        const possibleDigits = '0123456789';
+        let id = '';
+
+        while (id.length < idLength) {
+            const randomIndex = Math.floor(Math.random() * possibleDigits.length);
+            const randomDigit = possibleDigits.charAt(randomIndex);
+            id += randomDigit;
+        }
+
+         // check to be sure that the order never existed before otherwise call the method again
+         const exists = await Orders.findOne({orderId: id});
+
+         return !exists ? id: generateOrderID();
+     }
+
+     const generateConfirmation = async () => {
+        const codeLength = 9;
+        const groupLength = 3;
+        const possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+
+        while (code.length < codeLength) {
+            const randomIndex = Math.floor(Math.random() * possibleChars.length);
+            const randomChar = possibleChars.charAt(randomIndex);
+            code += randomChar;
+
+            if (code.length % groupLength === 0 && code.length !== codeLength) {
+                code += '-';
+            }
+        }
+        // check to be sure that the order never existed before otherwise call the method again
+        const exists = await Orders.findOne({orderConfirmationCode: code});
+
+        return !exists ? code: generateConfirmation();
+     }
+
+     // create the orderID
+     // create the orderConfirmationCode
+     const confirmationCode     = await generateConfirmation();
+     const orderID              = await generateOrderID();
+     
+     req.body['orderConfirmationCode'] = confirmationCode;
+     req.body['orderId'] = orderID;
+
+     orders = new Orders(_.pick(req.body, ["item", "itemDesc", "distance", "quantity", "weight", "pickup", "deliver", "customer", "cost", "customerEmail", "orderId", "orderConfirmationCode"])); // pick
 
      await orders.save();
 
-     res.send(_.pick(orders, ["_id", "item","itemDesc", "quantity", "weight", "distance", "pickup", "deliver", "customer", "rider", "cost", "status", "state", "date", "riderEnded", "customerConfirmed"])); // pick
+     res.send(_.pick(orders, ["_id", "item","itemDesc", "quantity", "weight", "distance", "pickup", "deliver", "customer", "customerEmail", "rider", "cost", "status", "state", "date", "riderEnded", "customerConfirmed", "orderId", "orderConfirmationCode"])); // pick
 });
 
 
