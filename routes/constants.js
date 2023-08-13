@@ -16,6 +16,48 @@ router.get('/', async (req, res) => {
     res.send(consts);
 });
 
+router.post('/fetch-constants', auth, async (req, res) => {
+    try {
+        const query = {};
+        const { 
+            child, 
+            value, 
+            startDate,  
+            endDate, 
+            limit,
+            skip
+        } = req.body;
+        if( child ) query[child] = value;
+        if( startDate && endDate ) { 
+            const isoDateStart  = new Date(startDate).toISOString();
+            const isoDateEnd    = new Date(endDate).toISOString();
+            query[`$and`] = [{date: {$gte: isoDateStart}}, {date: {$lte: isoDateEnd}}];
+        }
+
+        const consts = await Constants
+        .find(query)
+        .limit(limit)
+        .skip( !(isNaN(skip)) ? skip: 0 )
+        .select({
+            _id: 1,
+            title: 1, 
+            desc: 1, 
+            lastUpdated: 1, 
+            date: 1        
+        }).sort({date: -1});
+        
+        // total details
+        const total = await Constants.countDocuments(query);
+
+        //console.log(users, total);
+
+        return res.status(200).send({status: true, total: total, data: consts});
+
+    } catch (error) {
+      return res.status(500).send({status: false, message: error?.message});  
+    }
+});
+
 // find by ID
 
 router.get('/:id', async (req, res) => {
