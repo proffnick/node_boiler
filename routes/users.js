@@ -272,7 +272,7 @@ router.post('/fetch-users', auth, async (req, res) => {
 
 router.post('/fetch-riders', auth, async (req, res) => {
     try {
-        const query = {};
+        let query = {};
         const { 
             child, 
             value, 
@@ -344,7 +344,7 @@ router.post('/fetch-riders', auth, async (req, res) => {
 
 router.post('/fetch-vendors', auth, async (req, res) => {
     try {
-        const query = {};
+        let query = {};
         const { 
             child, 
             value, 

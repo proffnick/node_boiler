@@ -34,7 +34,7 @@ router.get('/count-new', auth, async (req, res)=> {
 
 router.post('/fetch-transactions', auth, async (req, res) => {
     try {
-        const query = {};
+        let query = {};
         const { 
             child, 
             value, 
@@ -56,7 +56,7 @@ router.post('/fetch-transactions', auth, async (req, res) => {
             query = {$or: [{_type: "CREDIT"}, {_type: "DEBIT"}]};
         }
 
-        const users = await Notifications
+        const notes = await Notifications
         .find(query)
         .limit(limit)
         .skip( !(isNaN(skip)) ? skip: 0 )
@@ -74,11 +74,10 @@ router.post('/fetch-transactions', auth, async (req, res) => {
         // total details
         const total = await Notifications.countDocuments(query);
 
-        console.log(users, total);
-
-        return res.status(200).send({status: true, total: total, data: users});
+        return res.status(200).send({status: true, total: total, data: notes});
 
     } catch (error) {
+        console.log(error, error?.message);
       return res.status(500).send({status: false, message: error?.message});  
     }
 });
