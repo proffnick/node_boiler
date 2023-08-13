@@ -32,6 +32,57 @@ router.get('/count-new', auth, async (req, res)=> {
 
 });
 
+router.post('/fetch-transactions', auth, async (req, res) => {
+    try {
+        const query = {};
+        const { 
+            child, 
+            value, 
+            startDate,  
+            endDate, 
+            limit,
+            skip
+        } = req.body;
+        if( child ) query[child] = value;
+        if( startDate && endDate ) { 
+            const isoDateStart  = new Date(startDate).toISOString();
+            const isoDateEnd    = new Date(endDate).toISOString();
+            query[`$and`] = [{date: {$gte: isoDateStart}}, {date: {$lte: isoDateEnd}}];
+        }
+
+        if(Object.keys(query).length && child !== '_type'){
+            query[`$and`]  = {$or: [{_type: "CREDIT"}, {_type: "DEBIT"}]};
+        }else if(child !== '_type'){
+            query = {$or: [{_type: "CREDIT"}, {_type: "DEBIT"}]};
+        }
+
+        const users = await Notifications
+        .find(query)
+        .limit(limit)
+        .skip( !(isNaN(skip)) ? skip: 0 )
+        .select({
+            _type: 1, 
+            _amount: 1, 
+            _note: 1, 
+            _action: 1, 
+            _read: 1, 
+            _date: 1, 
+            _userid: 1,
+            _id: 1      
+        }).sort({date: -1});
+        
+        // total details
+        const total = await Notifications.countDocuments(query);
+
+        console.log(users, total);
+
+        return res.status(200).send({status: true, total: total, data: users});
+
+    } catch (error) {
+      return res.status(500).send({status: false, message: error?.message});  
+    }
+});
+
 // find by ID
 
 router.get('/:id', async (req, res) => {
