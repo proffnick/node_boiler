@@ -54,6 +54,52 @@ router.get('/get-all-balances', auth, async (req, res) => {
     }
 });
 
+router.post('/fetch-wallets', auth, async (req, res) => {
+    try {
+        const query = {};
+        const { 
+            child, 
+            value, 
+            startDate,  
+            endDate, 
+            limit,
+            skip
+        } = req.body;
+        if( child ) query[child] = value;
+        if( startDate && endDate ) { 
+            const isoDateStart  = new Date(startDate).toISOString();
+            const isoDateEnd    = new Date(endDate).toISOString();
+            query[`$and`] = [{date: {$gte: isoDateStart}}, {date: {$lte: isoDateEnd}}];
+        }
+
+        const wallets = await Wallets
+        .find(query)
+        .limit(limit)
+        .skip( !(isNaN(skip)) ? skip: 0 )
+        .select({
+                balance: 1, 
+                user_id: 1, 
+                wallet_id: 1, 
+                wallet_bank_name: 1, 
+                wallet_bank_code: 1, 
+                wallet_account_number: 1, 
+                ref: 1,
+                _id: 1,
+                date: 1        
+        }).sort({date: -1});
+        
+        // total details
+        const total = await Wallets.countDocuments(query);
+
+        //console.log(orders, total);
+
+        return res.status(200).send({status: true, total: total, data: wallets});
+
+    } catch (error) {
+      return res.status(500).send({status: false, message: error?.message});  
+    }
+});
+
 router.get('/:id', async (req, res) => {
     const wallets = await Wallets.findOne({_id: req.params.id});
 
@@ -61,6 +107,7 @@ router.get('/:id', async (req, res) => {
 
     res.send(wallets);
 });
+
 router.get('/:by/:id', async (req, res) => {
     const by    = req.params.by ? req.params.by: 'user_id';
     const obj   = {};
