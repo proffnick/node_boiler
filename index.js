@@ -12,7 +12,7 @@ require('./startup/prod')(app);
 
 const options = {
     key: fs.readFileSync('/etc/letsencrypt/live/app.psalogistics.ng/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/app.psalogistics.ng/fullchain.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/app.psalogistics.ng/cert.pem'),
 };
 
 const server = https.createServer(options, app);
