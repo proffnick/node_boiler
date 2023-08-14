@@ -65,7 +65,9 @@ router.post('/bio', async (req, res) => {
                 pushNotificationToken: 1,
                 hasPendingRequest: 1, 
                 isComplete: 1,
-                isBiometric: 1
+                isBiometric: 1,
+                accountStatus: 1,
+                userRole: 1,
             }).sort({date: 1});
         
             if(!user) return res.status(400).send({error: true, message: 'Invalid Phone Number or Password'});
