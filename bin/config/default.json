@@ -15,9 +15,9 @@
     "paystackPrivateKey": "sk_test_dc047d570d769725d69aa7fc179ca705f30a6615",
     "paystackBaseUrl": "https://api.paystack.co",
     "sendMailPath":"http://3.76.47.121:5555/api/mails",
-    "gmailClientId": "315274394082-rbe14mj6jte0nr7079o0iu82d2grus9g.apps.googleusercontent.com",
-    "gmailClientSecret": "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",
-    "gmailRefreshToken": "1//03cy6ak9DiI4KCgYIARAAGAMSNwF-L9IrkC6FxiKOj0-uQuQMV6ffxXtQ7sNZTLVSTLeR7O-lNxnDE9eckE4MxsCCF6kZSBNovO0",
+    "gmailClientId": "418318455764-eccs3275puhjqol7i0t2mh5rt5jcjo0o.apps.googleusercontent.com",
+    "gmailClientSecret": "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",
+    "gmailRefreshToken": "1//03u-Oaq2jOAkhCgYIARAAGAMSNwF-L9IrVzRI9ehXQtQnJgFkb4Eqy5q9mWX8k9MKgmd9OXcxSNRt13BTvAf0ZYTY5U5e6VPkyVs",
     "gmailRedirectUrl": "https://psalogistics.ng/oauth/",
     "psaObjectId": "62ec780ffd7df49d0b2a927c"
 }
